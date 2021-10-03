@@ -1,6 +1,7 @@
 package com.example.dormitoryms.service.Impl;
 
 import com.example.dormitoryms.mapper.stuMapper;
+import com.example.dormitoryms.pojo.Admin;
 import com.example.dormitoryms.pojo.DormitoryDetail;
 import com.example.dormitoryms.pojo.Faculty;
 import com.example.dormitoryms.pojo.Student;
@@ -34,11 +35,6 @@ public class stuServiceImpl implements stuService {
     }
 
     @Override
-    public List<Faculty> getDepartmentList() {
-        return stumapper.getDepartmentList();
-    }
-
-    @Override
     public Student queryOne(String s) {
         return stumapper.queryOne(s);
     }
@@ -49,29 +45,13 @@ public class stuServiceImpl implements stuService {
     }
 
     @Override
-    public Integer queryCapacity(Student student) {
-        return stumapper.queryCapacity(student);
-    }
-
-    @Override
-    public List<Student> queryStuByDorNum(Integer dorNum) {
-        return stumapper.queryStuByDorNum(dorNum);
-    }
-
-    @Override
-    public void deleteStu(Integer stuid) {
+    public void deleteStu(String stuid) {
         stumapper.deleteStu(stuid);
     }
 
     @Override
-    public List<Integer> getDorListByLimit(Integer initial, Integer size) {
-        return stumapper.getDorListByLimit(initial,size);
+    public Integer queryLeaderNum(Integer dorNum) {
+        return stumapper.queryLeaderNum(dorNum);
     }
-
-    @Override
-    public List<DormitoryDetail> getDormitoryDetailByDNum(Integer id) {
-        return stumapper.getDormitoryDetailByDNum(id);
-    }
-
 
 }

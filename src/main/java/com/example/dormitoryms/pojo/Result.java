@@ -37,6 +37,10 @@ public class Result<T> {
         this.msg = msg;
         this.t = t;
     }
+    public Result(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 
     /**
      * @param code 状态码

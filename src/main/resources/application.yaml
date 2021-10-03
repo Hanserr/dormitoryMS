@@ -20,3 +20,8 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 0
+alioss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    accessKeyId: LTAI5tDyX895bkQV3P8HpxZG
+    accessKeySecret: 2faU%z2vUPSWctjV8iW7YW$ejCQ@%jWk
+    bucketName: dormitory-ms

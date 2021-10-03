@@ -16,12 +16,12 @@ public class Student {
     private String stuid;
     private String name;
     private Integer age;
-    private String gender;
+    private Integer gender;
     private Integer grade;
     private Integer department;
     //departmentName用于配合联合查询
     private String departmentName;
-    private String role;
+    private Integer role;
     private Integer dormitoryNum;
     private String status;
 }
