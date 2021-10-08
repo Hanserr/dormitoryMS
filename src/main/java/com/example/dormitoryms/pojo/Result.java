@@ -1,7 +1,10 @@
 package com.example.dormitoryms.pojo;
 
 import lombok.*;
+
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Auther Shelter
@@ -11,47 +14,33 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Result<T> {
+public class Result<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int code;
     private String msg;
-    private List<T> result;
-    private List<T> departmentList;
-    private List<T> dormitoryList;
-    private T t;
-    private Integer num;
+    private Object data;
 
-    public Result(int code, String msg, List<T> result) {
-        this.code = code;
-        this.msg = msg;
-        this.result = result;
-    }
-    public Result(int code, String msg, List<T> result, List departmentList, List dormitoryList) {
-        this.code = code;
-        this.msg = msg;
-        this.result = result;
-        this.departmentList = departmentList;
-        this.dormitoryList = dormitoryList;
-    }
-    public Result(int code, String msg, T t) {
-        this.code = code;
-        this.msg = msg;
-        this.t = t;
-    }
-    public Result(int code, String msg) {
-        this.code = code;
-        this.msg = msg;
+    public static Result fail(int code,String msg,Object data){
+        Result r = new Result();
+        r.setCode(code);
+        r.setMsg(msg);
+        r.setData(data);
+        return r;
     }
 
-    /**
-     * @param code 状态码
-     * @param msg 信息
-     * @param num 宿舍容量
-     * @param result 结果集
-     */
-    public Result(int code,String msg,Integer num,List<T> result){
-        this.code = code;
-        this.msg = msg;
-        this.num = num;
-        this.result = result;
-    };
+    public static Result fail(String msg){
+        return fail(400,msg,null);
+    }
+
+    public static Result success(int code,String msg,Object data){
+        Result r = new Result();
+        r.setCode(code);
+        r.setMsg(msg);
+        r.setData(data);
+        return r;
+    }
+
+    public static Result success(Object data){
+        return success(200,"success",data);
+    }
 }

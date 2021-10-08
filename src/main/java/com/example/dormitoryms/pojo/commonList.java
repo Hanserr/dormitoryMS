@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @Auther Shelter
  * @Date 7/18/2021
@@ -14,7 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class commonList {
+public class commonList implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String text;
     private String value;
 }

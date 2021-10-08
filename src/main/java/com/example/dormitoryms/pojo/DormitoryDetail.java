@@ -1,6 +1,7 @@
 package com.example.dormitoryms.pojo;
 
 import lombok.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -12,7 +13,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class DormitoryDetail {
+public class DormitoryDetail implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private BigDecimal waterbalance;
     private BigDecimal powerbalance;

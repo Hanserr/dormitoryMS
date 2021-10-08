@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Auther Shelter
@@ -27,12 +28,12 @@ public class dormitoryController {
      * @return 返回结果
      */
     @PostMapping("/queryStuByDorNum")
-    public Result<Student> queryStuByDorNum(@RequestBody Integer num){
+    public Result queryStuByDorNum(@RequestBody Integer num){
         try {
-            return new Result<>(200,"查询成功",dormitoryService.queryStuByDorNum(num));
+            return Result.success(dormitoryService.queryStuByDorNum(num));
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败");
+            return Result.fail("查询失败");
         }
     }
 
@@ -42,14 +43,17 @@ public class dormitoryController {
      * @return 返回容量和宿舍当前居住者信息
      */
     @PostMapping("/queryCapacity")
-    public Result<Student> queryCapacity(@RequestBody Integer num){
+    public Result queryCapacity(@RequestBody Integer num){
         try {
             Student s = new Student();
             s.setDormitoryNum(num);
-            return dormitoryService.queryCapacity(s)==null?new Result<>(500,"不存在此宿舍"):new Result<>(200,"查询成功",dormitoryService.queryCapacity(s),dormitoryService.queryStuByDorNum(num));
+            List l = new ArrayList();
+            l.add(dormitoryService.queryCapacity(s));
+            l.add(dormitoryService.queryStuByDorNum(num));
+            return dormitoryService.queryCapacity(s)==null?Result.fail("不存在此宿舍"):Result.success(l);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败");
+            return Result.fail("查询失败");
         }
     }
 
@@ -59,12 +63,12 @@ public class dormitoryController {
      * @return D-Num data
      */
     @GetMapping("/getDorListByLimit")
-    public Result<Integer> getDorListByLimit(Integer initialNumber){
+    public Result getDorListByLimit(Integer initialNumber){
         try {
-            return new Result<>(200,"查询成功",dormitoryService.getDorListByLimit(initialNumber,initialNumber+10));
+            return Result.success(dormitoryService.getDorListByLimit(initialNumber,initialNumber+10));
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败",new ArrayList<>());
+            return Result.fail("查询失败");
         }
     }
 
@@ -74,15 +78,15 @@ public class dormitoryController {
      * @return dormitory detail
      */
     @GetMapping("/getDormitoryDetail")
-    public Result<DormitoryDetail>getdetial(Integer id){
+    public Result getdetial(Integer id){
         try {
             if(dormitoryService.getDormitoryDetailByDNum(id).size()==0){
-                return new Result<>(500,"查询失败");
+                return Result.fail("查询失败");
             }
-            return new Result<>(200,"查询成功",dormitoryService.getDormitoryDetailByDNum(id));
+            return Result.success(dormitoryService.getDormitoryDetailByDNum(id));
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败");
+            return Result.fail("查询失败");
         }
     }
 }

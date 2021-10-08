@@ -6,7 +6,6 @@ import com.example.dormitoryms.service.Impl.dormitoryServiceImpl;
 import com.example.dormitoryms.service.Impl.stuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.Jedis;
 import java.util.*;
 
 
@@ -16,14 +15,6 @@ import java.util.*;
  **/
 @RestController
 public class stuController {
-//    public static void main(String[] args) {
-//        //连接本地的 Redis 服务
-//        Jedis jedis = new Jedis("127.0.0.1",6379);
-//        // 如果 Redis 服务设置了密码，需要下面这行，没有就不需要
-//        System.out.println("连接成功");
-//        //查看服务是否运行
-//        System.out.println("服务正在运行: "+jedis.ping());
-//    }
     @Autowired
     private stuServiceImpl stuService;
 
@@ -36,14 +27,14 @@ public class stuController {
      * @return 返回结果
      */
     @PostMapping("/insert")
-    public Result<Student> insert(@RequestBody Student student){
+    public Result insert(@RequestBody Student student){
         try {
             student.setDepartment(student.getDepartment()+1);
             stuService.insert(student);
-            return new Result<>(200,"添加成功",stuService.queryOne(student.getStuid()));
+            return Result.success(null);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"添加失败");
+            return Result.fail("添加失败");
         }
     }
 
@@ -53,7 +44,7 @@ public class stuController {
      * @return 返回查询结果列表
      */
     @PostMapping("/queryByCondition")
-    public Result<Student> query(@RequestBody String s){
+    public Result query(@RequestBody String s){
         List<Student> l;
         List<commonList> departmentLists = new ArrayList<>();
         List<commonList> dormitoryLists = new ArrayList<>();
@@ -62,7 +53,7 @@ public class stuController {
             l = stuService.queryByCondition(s);
             //判断是否查询到数据
             if (l==null){
-                return new Result<>(500,"数据为空");
+                return Result.fail("查询失败");
             }
             //公共列表
             List<String>departmentCommonList = new ArrayList<>();
@@ -91,9 +82,13 @@ public class stuController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败");
+            return Result.fail("查询失败");
         }
-        return new Result<>(200, "查询成功", l,departmentLists,dormitoryLists);
+        List r = new ArrayList();
+        r.add(l);
+        r.add(departmentLists);
+        r.add(dormitoryLists);
+        return Result.success(r);
     }
 
     /**
@@ -102,12 +97,16 @@ public class stuController {
      * @return 返回单条数据
      */
     @PostMapping("queryOne")
-    public Result<Student>queryOne(@RequestBody String s){
+    public Result queryOne(@RequestBody String s){
         try {
-            return new Result<>(200,"数据为空",stuService.queryOne(s));
+            Student student = stuService.queryOne(s);
+            if (student != null){
+                return Result.success(student);
+            }
+            return Result.fail("查询失败");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"数据为空");
+            return Result.fail("数据为空");
         }
     }
 
@@ -117,17 +116,17 @@ public class stuController {
      * @return 返回修改完的结果用以更新列表
      */
     @PostMapping("/updateStu")
-    public Result<Student> updateStu(@RequestBody Student student){
+    public Result updateStu(@RequestBody Student student){
         try {
             if (stuService.queryLeaderNum(student.getDormitoryNum())>0 && student.getRole()==1){
-                return new Result<>(500,"当前宿舍已有寝室长");
+                return Result.fail("当前宿舍已有寝室长");
             }
             stuService.updateStu(student);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"修改失败");
+            return Result.fail("修改失败");
         }
-        return new Result<>(200,"修改成功",stuService.queryOne(student.getStuid()));
+        return Result.success(stuService.queryOne(student.getStuid()));
     }
 
     /**
@@ -136,12 +135,12 @@ public class stuController {
      * @return 返回结果
      */
     @PostMapping("/addStudent")
-    public Result<Student> addStudent(@RequestBody String students){
+    public Result addStudent(@RequestBody String students){
         List<Student> list = JSONObject.parseArray(students,Student.class);
         //添加前检查宿舍容量
         for (Student s:list){
             if (dormitoryService.queryCapacity(s).equals(stuService.queryMember(s))){
-                return new Result<>(500,"["+s.getDormitoryNum()+"]宿舍已满");
+                return Result.fail("["+s.getDormitoryNum()+"]宿舍已满");
             }
         }
         //检查通过后可添加
@@ -151,10 +150,10 @@ public class stuController {
                 stuService.insert(student);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result<>(500,"插入数据失败");
+                return Result.fail("插入数据失败");
             }
         }
-        return new Result<>(200,"插入数据成功");
+        return Result.success("插入数据成功");
     }
 
     /**
@@ -163,13 +162,13 @@ public class stuController {
      * @return 返回删除结果
      */
     @PostMapping("/delete")
-    public Result<Student> deleteStu(@RequestBody String stuid){
+    public Result deleteStu(@RequestBody String stuid){
         try {
             stuService.deleteStu(stuid);
-            return new Result<>(200,"删除成功");
+            return Result.success("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"删除失败");
+            return Result.fail("删除失败");
         }
     }
 }

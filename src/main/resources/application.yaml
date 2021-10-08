@@ -9,19 +9,18 @@ spring:
     username: root
     password: hanser
   redis:
-    database: 0
     host: 127.0.0.1
     port: 6379
-    password: hanser
-    jedis:
+    lettuce:
       pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
-    timeout: 0
+        max-active: 200
 alioss:
     endpoint: oss-cn-shanghai.aliyuncs.com
     accessKeyId: LTAI5tDyX895bkQV3P8HpxZG
     accessKeySecret: 2faU%z2vUPSWctjV8iW7YW$ejCQ@%jWk
     bucketName: dormitory-ms
+auth:
+  jwt:
+    header: Authorization
+    expire: 604800 #7天
+    key: vsdnuf9v3yt4vp2n0c39cnq3934kmr10

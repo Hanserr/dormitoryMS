@@ -21,12 +21,12 @@ public class facultyController {
      * @return 返回所有院系列表
      */
     @GetMapping("/getDepartmentList")
-    public Result<Faculty> getDepartmentList(){
+    public Result getDepartmentList(){
         try {
-            return new Result<Faculty>(200,"查询成功",stuService.getDepartmentList());
+            return Result.success(stuService.getDepartmentList());
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(500,"查询失败");
+            return Result.fail("查询失败");
         }
     }
 }

@@ -12,4 +12,7 @@ public interface adminMapper {
     //通过邮箱和密码判断管理员账号
     @Select("select username,phone,email from admin where email = #{email} and password = #{password}")
     Admin identifyAdminByEmail(Admin admin);
+    //
+    @Select("select * from admin where email = '${value}' or phone = '${value}'")
+    Admin queryOneByAccount(String account);
 }

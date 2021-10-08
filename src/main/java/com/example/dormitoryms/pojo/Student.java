@@ -1,6 +1,7 @@
 package com.example.dormitoryms.pojo;
 
 import lombok.*;
+import java.io.Serializable;
 
 /**
  * @Auther Shelter
@@ -11,7 +12,8 @@ import lombok.*;
 @ToString
 @Setter
 @Getter
-public class Student {
+public class Student implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Integer id ;
     private String stuid;
     private String name;
