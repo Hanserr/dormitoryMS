@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ *认证异常入口
  * @Auther Shelter
  * @Date 10/4/2021
  **/
@@ -21,5 +22,6 @@ public class CustomizeAuthenticationEntryPoint implements AuthenticationEntryPoi
         Result result = Result.fail("无权");
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
+        httpServletResponse.getWriter().close();
     }
 }

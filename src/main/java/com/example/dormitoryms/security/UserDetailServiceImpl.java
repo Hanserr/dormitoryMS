@@ -3,13 +3,16 @@ package com.example.dormitoryms.security;
 import com.example.dormitoryms.pojo.Admin;
 import com.example.dormitoryms.service.adminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
+ * 根据用户名返回用户对象
  * @Auther Shelter
  * @Date 10/4/2021
  **/
@@ -19,7 +22,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
     adminService adminservice;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("test2");
         //判断username是否为空
         if (username == null || "".equals(username)){
             throw new RuntimeException("用户不能为空");
@@ -30,11 +32,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户名或密码错误");
         }
         //返回用户
-        return new AccountUser(a.getUid(),a.getPhone(),a.getUsername(),a.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_admin,ROLE_normal"));
+        return new AccountUser(a.getUid(),a.getPhone(),a.getUsername(),a.getPassword(), getUserAuthority(a.getUsername()));
     }
 
     //权限
-//    public List<GrantedAuthority> getUserAuthority(Long userId){
-//
-//    }
+    public List<GrantedAuthority> getUserAuthority(String username){
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(adminservice.getUserAuthorityInfo(username));
+    }
 }

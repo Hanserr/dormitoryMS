@@ -21,6 +21,6 @@ alioss:
     bucketName: dormitory-ms
 auth:
   jwt:
-    header: Authorization
+    header: authorization
     expire: 604800 #7天
     key: vsdnuf9v3yt4vp2n0c39cnq3934kmr10

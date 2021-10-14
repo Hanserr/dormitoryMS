@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 登陆成功处理器
  * @Auther Shelter
  * @Date 10/3/2021
  **/
@@ -33,7 +34,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         httpServletResponse.setHeader(jwtUtils.getHeader(),jwt);
 
         Result result = Result.success("登陆成功");
-
         servletOutputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
         servletOutputStream.flush();
         servletOutputStream.close();

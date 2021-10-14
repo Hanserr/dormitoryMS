@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
+ * 验证码过滤器
  * @Auther Shelter
  * @Date 10/7/2021
  **/
@@ -52,13 +53,13 @@ public class CaptchaFilter extends OncePerRequestFilter {
             String code = jsonObject.getString("code");
             String key= jsonObject.getString("token");
 
-            //post请求只可获取一次值，此处保存用户名密码
+            //post请求下，request只可获取一次值，此处保存用户名密码
             request.setAttribute("username",jsonObject.getString("username"));
             request.setAttribute("password",jsonObject.getString("password"));
 
             //校验验证码
             try {
-                validate(request,code,key);
+                validate(code,key);
             } catch (AuthenticationException e) {
                 //交给认证失败处理器处理
                 loginFailureHandler.onAuthenticationFailure(request,response,e);
@@ -68,12 +69,12 @@ public class CaptchaFilter extends OncePerRequestFilter {
     }
 
     //校验验证码
-    private void validate(HttpServletRequest request,String code,String key){
+    private void validate(String code,String key){
         if ((code == null || code.equals(""))||(key == null || key.equals(""))){
             throw new CaptchaException("验证码错误");
         }
         redisUtil.get(key);
-        if (code.equals(redisUtil.hget(Const.CAPTCHA_KEY,key))){
+        if (!code.equals(redisUtil.hget(Const.CAPTCHA_KEY,key))){
             throw new CaptchaException("验证码错误");
         }
         //验证完删除

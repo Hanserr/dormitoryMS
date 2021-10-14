@@ -1,5 +1,6 @@
 package com.example.dormitoryms.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 自定义用户验证过滤器
  * @Auther Shelter
  * @Date 10/4/2021
  **/
 public class myAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    @Autowired
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         if (!request.getMethod().equals("POST")) {
@@ -34,11 +37,8 @@ public class myAuthenticationFilter extends UsernamePasswordAuthenticationFilter
                 password = "";
             }
             username = username.trim();
-            List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password, AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_admin,ROLE_normal"));
-
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);
             setDetails(request,authenticationToken);
-            System.out.println(authenticationToken);
             return this.getAuthenticationManager().authenticate(authenticationToken);
         }
         return super.attemptAuthentication(request,response);

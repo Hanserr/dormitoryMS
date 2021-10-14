@@ -5,6 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
+/**
+ * 院系mapper
+ */
+
 @Mapper
 public interface facultyMapper {
     //查询所有院系部门

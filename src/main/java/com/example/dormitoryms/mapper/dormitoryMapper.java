@@ -9,9 +9,11 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
+ * 宿舍mapper
  * @Auther Shelter
  * @Date 10/2/2021
  **/
+
 @Mapper
 public interface dormitoryMapper {
     //查询指定宿舍容量

@@ -4,6 +4,7 @@ import com.example.dormitoryms.pojo.Faculty;
 import com.example.dormitoryms.pojo.Result;
 import com.example.dormitoryms.service.Impl.facultyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ public class facultyController {
      * 院系列表
      * @return 返回所有院系列表
      */
+    @PreAuthorize("hasAuthority('sys:getDepList')")
     @GetMapping("/getDepartmentList")
     public Result getDepartmentList(){
         try {

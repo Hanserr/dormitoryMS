@@ -17,43 +17,4 @@ public class adminController {
     @Autowired
     private adminService adminService;
 
-    /**
-     * 管理员手机号登陆
-     * @param admin 管理员信息
-     * @return 是否登录成功
-     */
-    @PostMapping("/identifyAdminByPhone")
-    public String identifyAdminByPhone(@RequestBody Admin admin){
-//        try {
-//            Admin a = adminService.identifyAdminByPhone(admin);
-//            if (a == null){
-//                return new Result<>(500,"账号或密码错误");
-//            }
-//            return new Result<>(200,"登陆成功",a);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new Result<>(500,"登陆失败");
-//        }
-        return "测试";
-    }
-
-//    /**
-//     * 管理员邮箱登录
-//     * @param admin 管理员信息
-//     * @return 是否登陆成功
-//     */
-//    @PostMapping("/identifyAdminByEmail")
-//    public Result<Admin> identifyAdminByEmail(@RequestBody Admin admin){
-//        try {
-//            Admin a = adminService.identifyAdminByEmail(admin);
-//            if (a == null){
-//                return new Result<>(500,"账号或密码错误");
-//            }
-//            return new Result<>(200,"登陆成功",a);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new Result<>(500,"登陆失败");
-//        }
-//    }
-
 }

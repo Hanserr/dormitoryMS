@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 登陆失败处理器
  * @Auther Shelter
  * @Date 10/3/2021
  **/
@@ -22,7 +23,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
-        Result result = Result.fail("用户名或密码错误");
+        Result result = Result.fail(e.getMessage());
         servletOutputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
         servletOutputStream.flush();
         servletOutputStream.close();

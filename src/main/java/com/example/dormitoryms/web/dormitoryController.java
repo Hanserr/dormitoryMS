@@ -5,6 +5,7 @@ import com.example.dormitoryms.pojo.Result;
 import com.example.dormitoryms.pojo.Student;
 import com.example.dormitoryms.service.Impl.dormitoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class dormitoryController {
      * @param num 寝室号
      * @return 返回结果
      */
+    @PreAuthorize("hasAuthority('sys:queryStuByDorNum')")
     @PostMapping("/queryStuByDorNum")
     public Result queryStuByDorNum(@RequestBody Integer num){
         try {
@@ -42,6 +44,7 @@ public class dormitoryController {
      * @param num 寝室号
      * @return 返回容量和宿舍当前居住者信息
      */
+    @PreAuthorize("hasAuthority('sys:queryCapacity')")
     @PostMapping("/queryCapacity")
     public Result queryCapacity(@RequestBody Integer num){
         try {
@@ -62,6 +65,7 @@ public class dormitoryController {
      * @param initialNumber be used to record has returned data size,this param reserved by client
      * @return D-Num data
      */
+    @PreAuthorize("hasAuthority('sys:getDorListByLimit')")
     @GetMapping("/getDorListByLimit")
     public Result getDorListByLimit(Integer initialNumber){
         try {
@@ -77,6 +81,7 @@ public class dormitoryController {
      * @param id D-Num
      * @return dormitory detail
      */
+    @PreAuthorize("hasAuthority('sys:getDorDetail')")
     @GetMapping("/getDormitoryDetail")
     public Result getdetial(Integer id){
         try {

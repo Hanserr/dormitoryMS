@@ -15,7 +15,7 @@ import java.util.List;
 @ToString
 public class Admin implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Long uid;
+    private Integer uid;
     private String username;
     private String password;
     private String phone;

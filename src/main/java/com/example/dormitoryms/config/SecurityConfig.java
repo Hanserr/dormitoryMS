@@ -1,7 +1,5 @@
 package com.example.dormitoryms.config;
 
-import com.alibaba.fastjson.JSON;
-import com.example.dormitoryms.pojo.Result;
 import com.example.dormitoryms.security.*;
 import com.example.dormitoryms.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +11,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * @Auther Shelter
+ *自定义适配器
+ * @Auther shelter
  * @Date 10/3/2021
  **/
 @Configuration
@@ -64,7 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //白名单
     private static final String[] URL_WHITELIST = {
-            "/adminLogin",
             "/getCaptcha",
     };
 
@@ -72,8 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().and().csrf().disable()
             //登陆配置
             .formLogin()
-            .successHandler(loginSuccessHandler)
-            .failureHandler(loginFailureHandler)
             //禁用session
             .and()
                 .sessionManagement()
@@ -91,28 +81,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 //验证账号密码前检查验证码
                 .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
-                //添加自定义json过滤器至默认过滤器处
-                .addFilterAt(authenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 //jwt过滤器
-                .addFilter(jwtAuthenticationFilter());
+                .addFilterBefore(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                //添加自定义json过滤器至默认过滤器处
+                .addFilterAt(authenticationFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 
     //自定义json认证过滤器
-    @Bean
     myAuthenticationFilter authenticationFilter() throws Exception{
         myAuthenticationFilter filter = new myAuthenticationFilter();
         filter.setAuthenticationManager(super.authenticationManagerBean());
+        //认证成功和失败处理器
+        filter.setAuthenticationSuccessHandler(loginSuccessHandler);
+        filter.setAuthenticationFailureHandler(loginFailureHandler);
         filter.setFilterProcessesUrl("/login");
-        filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                AccountUser accountUser = (AccountUser) authentication.getPrincipal();
-                String jwtToken = jwtUtils.generateToken(accountUser.getUsername());
-                httpServletResponse.getWriter().write(JSON.toJSONString(Result.success(jwtToken)));
-            }
-        });
+
+        filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailService);

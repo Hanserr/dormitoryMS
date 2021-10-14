@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 /**
+ * 学生mapper
  * @Auther Shelter
  * @Date 7/8/2021
  **/

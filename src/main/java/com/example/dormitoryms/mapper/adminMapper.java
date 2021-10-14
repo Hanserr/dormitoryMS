@@ -4,15 +4,19 @@ import com.example.dormitoryms.pojo.Admin;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
+/**
+ * 管理员mapper
+ */
+
 @Mapper
 public interface adminMapper {
-    //通过手机号和密码判断管理员账号
-    @Select("select username,phone,email from admin where phone = #{phone} and password = #{password}")
-    Admin identifyAdminByPhone(Admin admin);
-    //通过邮箱和密码判断管理员账号
-    @Select("select username,phone,email from admin where email = #{email} and password = #{password}")
-    Admin identifyAdminByEmail(Admin admin);
-    //
-    @Select("select * from admin where email = '${value}' or phone = '${value}'")
+    //通过用户名查询角色
+    @Select("select * from admin where username = ${value}")
     Admin queryOneByAccount(String account);
+
+    //
+    @Select("select am.perms from admin a LEFT JOIN admin_middle_menu amm on amm.adminID = a.uid LEFT JOIN admin_menu am on amm.menuID = am.id where a.username = ${value}")
+    List<String> authorityList(String username);
 }

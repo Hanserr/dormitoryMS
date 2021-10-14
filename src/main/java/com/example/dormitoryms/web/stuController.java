@@ -5,6 +5,7 @@ import com.example.dormitoryms.pojo.*;
 import com.example.dormitoryms.service.Impl.dormitoryServiceImpl;
 import com.example.dormitoryms.service.Impl.stuServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -26,6 +27,7 @@ public class stuController {
      * @param student 传入的学生数据
      * @return 返回结果
      */
+    @PreAuthorize("hasAuthority('sys:manageStu:commonAdd')")
     @PostMapping("/insert")
     public Result insert(@RequestBody Student student){
         try {
@@ -43,6 +45,7 @@ public class stuController {
      * @param s 用户输入的关键字
      * @return 返回查询结果列表
      */
+    @PreAuthorize("hasAuthority('sys:queryStu')")
     @PostMapping("/queryByCondition")
     public Result query(@RequestBody String s){
         List<Student> l;
@@ -96,6 +99,7 @@ public class stuController {
      * @param s 学号
      * @return 返回单条数据
      */
+    @PreAuthorize("hasAuthority('sys:queryOneStu')")
     @PostMapping("queryOne")
     public Result queryOne(@RequestBody String s){
         try {
@@ -115,6 +119,7 @@ public class stuController {
      * @param student 学生数据
      * @return 返回修改完的结果用以更新列表
      */
+    @PreAuthorize("hasAuthority(' sys:updateStu')")
     @PostMapping("/updateStu")
     public Result updateStu(@RequestBody Student student){
         try {
@@ -130,10 +135,11 @@ public class stuController {
     }
 
     /**
-     * 添加学生
+     * 批量添加学生
      * @param students json字符串数据
      * @return 返回结果
      */
+    @PreAuthorize("hasAuthority('sys:addStuList')")
     @PostMapping("/addStudent")
     public Result addStudent(@RequestBody String students){
         List<Student> list = JSONObject.parseArray(students,Student.class);
@@ -161,6 +167,7 @@ public class stuController {
      * @param stuid 传入学号
      * @return 返回删除结果
      */
+    @PreAuthorize("hasAuthority('sys:deleteStu')")
     @PostMapping("/delete")
     public Result deleteStu(@RequestBody String stuid){
         try {

@@ -14,7 +14,7 @@ import java.util.Collection;
  **/
 public class AccountUser implements UserDetails {
 
-    private Long uid;
+    private Integer uid;
     private String phone;
     private static final long serialVersionUID = 540L;
     private static final Log logger = LogFactory.getLog(User.class);
@@ -26,11 +26,11 @@ public class AccountUser implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
-    public AccountUser(Long uid,String phone,String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AccountUser(Integer uid,String phone,String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this(uid,phone,username, password, true, true, true, true, authorities);
     }
 
-    public AccountUser(Long uid,String phone,String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public AccountUser(Integer uid,String phone,String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         Assert.isTrue(username != null && !"".equals(username) && password != null, "Cannot pass null or empty values to constructor");
         this.uid = uid;
         this.phone = phone;

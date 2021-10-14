@@ -2,6 +2,7 @@ package com.example.dormitoryms.pojo;
 
 import lombok.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @Auther Shelter
@@ -25,7 +26,9 @@ public class Student implements Serializable{
     private String departmentName;
     private Integer role;
     private Integer dormitoryNum;
-    private String status;
+    private Timestamp createTime;
+    private Timestamp updateTime;
+    private String avatarUrl;
 }
 
 
