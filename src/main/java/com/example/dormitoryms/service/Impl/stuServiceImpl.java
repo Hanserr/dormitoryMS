@@ -20,6 +20,11 @@ public class stuServiceImpl implements stuService {
     private stuMapper stumapper;
 
     @Override
+    public Student queryByStuid(String stuid) {
+        return stumapper.queryByStuid(stuid);
+    }
+
+    @Override
     public void insert(Student s) {
         stumapper.insertStudent(s);
     }

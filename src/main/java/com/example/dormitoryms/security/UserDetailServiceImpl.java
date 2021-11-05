@@ -1,7 +1,9 @@
 package com.example.dormitoryms.security;
 
 import com.example.dormitoryms.pojo.Admin;
+import com.example.dormitoryms.pojo.Student;
 import com.example.dormitoryms.service.adminService;
+import com.example.dormitoryms.service.stuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -20,6 +22,10 @@ import java.util.List;
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     adminService adminservice;
+
+    @Autowired
+    stuService  stuservice;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //判断username是否为空
@@ -29,10 +35,15 @@ public class UserDetailServiceImpl implements UserDetailsService {
         //根据username查数据库，空则抛异常
         Admin a = adminservice.getOneByUsername(username);
         if(a == null){
-            throw new RuntimeException("用户名或密码错误");
+            //管理员列表若查询为空则查询用户列表
+            Student s = stuservice.queryByStuid(username);
+            if (s == null){
+                throw new RuntimeException("用户名或密码错误");
+            }
+            return new AccountUser(s.getStuid(),a.getPhone(),a.getUsername(),a.getPassword(),getUserAuthority(a.getUsername()));
         }
         //返回用户
-        return new AccountUser(a.getUid(),a.getPhone(),a.getUsername(),a.getPassword(), getUserAuthority(a.getUsername()));
+        return new AccountUser(String.valueOf(a.getUid()),a.getPhone(),a.getUsername(),a.getPassword(), getUserAuthority(a.getUsername()));
     }
 
     //权限

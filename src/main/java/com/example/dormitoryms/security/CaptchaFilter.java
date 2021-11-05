@@ -33,7 +33,7 @@ public class CaptchaFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String url = request.getRequestURI();
-        if ("/login".equals(url) && request.getMethod().equals("POST")){
+        if (("/adminLogin".equals(url) || "/userLogin".equals(url)) && request.getMethod().equals("POST")){
             //获取字符串
             StringBuffer sb = new StringBuffer();
             String line = null;

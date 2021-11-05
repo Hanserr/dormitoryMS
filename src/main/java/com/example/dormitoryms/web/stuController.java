@@ -119,7 +119,7 @@ public class stuController {
      * @param student 学生数据
      * @return 返回修改完的结果用以更新列表
      */
-    @PreAuthorize("hasAuthority(' sys:updateStu')")
+    @PreAuthorize("hasAuthority('sys:updateStu')")
     @PostMapping("/updateStu")
     public Result updateStu(@RequestBody Student student){
         try {

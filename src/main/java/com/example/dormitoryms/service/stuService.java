@@ -15,4 +15,5 @@ public interface stuService {
     Integer queryMember(Student student);
     void deleteStu(String stuid);
     Integer queryLeaderNum(Integer dorNum);
+    Student queryByStuid(String stuid);
 }

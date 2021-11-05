@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     Claims claims = jwtUtils.getClaimsToken(jwt);
-        System.out.println(claims);
     if (claims == null){
         throw new JwtException("token exception");
     }

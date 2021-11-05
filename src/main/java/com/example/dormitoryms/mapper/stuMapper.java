@@ -32,4 +32,7 @@ public interface stuMapper {
     //查询指定宿舍内是否已有寝室长
     @Select("SELECT count( stu.role) from student stu where stu.dormitoryNum = ${value} and stu.role=1")
     Integer queryLeaderNum(Integer dorNum);
+    //根据学号查询学生数据
+    @Select("select * from student where stuid = ${value}")
+    Student queryByStuid(String stuid);
 }

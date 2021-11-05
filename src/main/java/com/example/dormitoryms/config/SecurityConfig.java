@@ -84,20 +84,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //jwt过滤器
                 .addFilterBefore(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 //添加自定义json过滤器至默认过滤器处
-                .addFilterAt(authenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(adminAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(userAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 
-    //自定义json认证过滤器
-    myAuthenticationFilter authenticationFilter() throws Exception{
-        myAuthenticationFilter filter = new myAuthenticationFilter();
-        filter.setAuthenticationManager(super.authenticationManagerBean());
+    //自定义管理员json认证过滤器
+    adminAuthenticationFilter adminAuthenticationFilter() throws Exception{
+        adminAuthenticationFilter adminFilter = new adminAuthenticationFilter();
+        adminFilter.setAuthenticationManager(super.authenticationManagerBean());
         //认证成功和失败处理器
-        filter.setAuthenticationSuccessHandler(loginSuccessHandler);
-        filter.setAuthenticationFailureHandler(loginFailureHandler);
-        filter.setFilterProcessesUrl("/login");
+        adminFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
+        adminFilter.setAuthenticationFailureHandler(loginFailureHandler);
+        adminFilter.setFilterProcessesUrl("/adminLogin");
+        adminFilter.setAuthenticationManager(authenticationManagerBean());
+        return adminFilter;
+    }
 
-        filter.setAuthenticationManager(authenticationManagerBean());
-        return filter;
+    //自定义用户json认证过滤器
+    userAuthenticationFilter userAuthenticationFilter() throws  Exception{
+        userAuthenticationFilter userFilter = new userAuthenticationFilter();
+        userFilter.setAuthenticationManager(super.authenticationManagerBean());
+        //认证成功和失败处理器
+        userFilter.setAuthenticationSuccessHandler(loginSuccessHandler);
+        userFilter.setAuthenticationFailureHandler(loginFailureHandler);
+        userFilter.setFilterProcessesUrl("/userLogin");
+        userFilter.setAuthenticationManager(authenticationManagerBean());
+        return userFilter;
     }
 
     @Override
