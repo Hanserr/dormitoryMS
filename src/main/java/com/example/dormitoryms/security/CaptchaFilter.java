@@ -52,11 +52,13 @@ public class CaptchaFilter extends OncePerRequestFilter {
             //获取json对象
             String code = jsonObject.getString("code");
             String key= jsonObject.getString("token");
+            String usernameJsonStr = jsonObject.getString("username");
+            JSONObject usernameJson = JSON.parseObject(usernameJsonStr);
+            String username = usernameJson.getString("username");
 
             //post请求下，request只可获取一次值，此处保存用户名密码
             request.setAttribute("username",jsonObject.getString("username"));
             request.setAttribute("password",jsonObject.getString("password"));
-
             //校验验证码
             try {
                 validate(code,key);

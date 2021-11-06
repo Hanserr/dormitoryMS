@@ -1,5 +1,7 @@
 package com.example.dormitoryms.security;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.dormitoryms.pojo.Admin;
 import com.example.dormitoryms.pojo.Student;
 import com.example.dormitoryms.service.adminService;
@@ -28,22 +30,27 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        String jsonStr = username.toString().replaceAll("\\s","").replaceAll("\n","");
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        String mark = jsonObject.getString("mark");
+        String nameStr = jsonObject.getString("username");
         //判断username是否为空
-        if (username == null || "".equals(username)){
+        if (nameStr == null || "".equals(username)){
             throw new RuntimeException("用户不能为空");
         }
-        //根据username查数据库，空则抛异常
-        Admin a = adminservice.getOneByUsername(username);
-        if(a == null){
-            //管理员列表若查询为空则查询用户列表
-            Student s = stuservice.queryByStuid(username);
-            if (s == null){
-                throw new RuntimeException("用户名或密码错误");
+        //根据标识判断用户类型
+        if ("admin".equals(mark)){
+            Admin a = adminservice.getOneByUsername(nameStr);
+            if (a != null){
+                return new AccountUser(String.valueOf(a.getUid()),a.getPhone(),a.getUsername(),a.getPassword(), getUserAuthority(a.getUsername()));
             }
-            return new AccountUser(s.getStuid(),a.getPhone(),a.getUsername(),a.getPassword(),getUserAuthority(a.getUsername()));
+        }else if ("user".equals(mark)){
+            Student s = stuservice.queryByStuid(username);
+            if (s != null){
+                return new AccountUser(String.valueOf(s.getStuid()),s.getPhone(),s.getName(),s.getPassword(),getUserAuthority(s.getName()));
+            }
         }
-        //返回用户
-        return new AccountUser(String.valueOf(a.getUid()),a.getPhone(),a.getUsername(),a.getPassword(), getUserAuthority(a.getUsername()));
+        return new AccountUser(null,null,null,null,getUserAuthority(null));
     }
 
     //权限

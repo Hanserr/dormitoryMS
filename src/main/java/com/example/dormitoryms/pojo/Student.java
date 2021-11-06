@@ -19,16 +19,17 @@ public class Student implements Serializable{
     private String stuid;
     private String name;
     private Integer age;
+    private String avatarUrl;
     private Integer gender;
     private Integer grade;
     private Integer department;
-    //departmentName用于配合联合查询
-    private String departmentName;
     private Integer role;
     private Integer dormitoryNum;
     private Timestamp createTime;
     private Timestamp updateTime;
-    private String avatarUrl;
+    private String password;
+    private String phone;
+    private String departmentName;
 }
 
 
